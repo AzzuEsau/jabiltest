@@ -52,13 +52,20 @@ namespace api.Controllers
         }
 
         [HttpPost("")]
-        public async Task<int> AddNewMovie([FromBody]Movie movieModel)
+        public async Task<int> AddNewMovie([FromBody]Movie movieModel, int classificationId)
         {
+            var fkclassification = await _context.Classifications.Where(x => x.Id == classificationId)
+                .Select(x => new Classification
+                {
+                    Id = x.Id,
+                    Name = x.Name
+                }).FirstAsync();
+
             var movie = new Movie()
             {
                 Name = movieModel.Name,
                 Description = movieModel.Description,
-                FKclassification = movieModel.FKclassification,
+                FKclassification = fkclassification,
                 Update = movieModel.Update
             };
 
