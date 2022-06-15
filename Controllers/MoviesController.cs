@@ -28,7 +28,9 @@ namespace api.Controllers
             {
                 Id = x.Id,
                 Name = x.Name,
-                Description = x.Description
+                Description = x.Description,
+                FKclassification = x.FKclassification,
+                
             }).ToListAsync();
 
             return records;
@@ -42,10 +44,28 @@ namespace api.Controllers
                     {
                         Id = x.Id,
                         Name = x.Name,
-                        Description = x.Description
+                        Description = x.Description,
+                        FKclassification = x.FKclassification,
                     }).FirstAsync();
 
             return record;
+        }
+
+        [HttpPost("")]
+        public async Task<int> AddNewMovie([FromBody]Movie movieModel)
+        {
+            var movie = new Movie()
+            {
+                Name = movieModel.Name,
+                Description = movieModel.Description,
+                FKclassification = movieModel.FKclassification,
+                Update = movieModel.Update
+            };
+
+            _context.Movies.Add(movie);
+            await _context.SaveChangesAsync();
+
+            return movie.Id;
         }
     }
 }

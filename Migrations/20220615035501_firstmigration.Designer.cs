@@ -10,7 +10,7 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220614234253_firstmigration")]
+    [Migration("20220615035501_firstmigration")]
     partial class firstmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -70,16 +70,20 @@ namespace api.Migrations
                         .HasColumnType("integer")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<int>("FKdirector")
+                    b.Property<int?>("FKdirectorId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("FKmovie")
+                    b.Property<int?>("FKmovieId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("Update")
                         .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FKdirectorId");
+
+                    b.HasIndex("FKmovieId");
 
                     b.ToTable("DirectorsMovies");
                 });
@@ -95,7 +99,7 @@ namespace api.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("FKclassification")
+                    b.Property<int?>("FKclassificationId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Name")
@@ -107,7 +111,33 @@ namespace api.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("FKclassificationId");
+
                     b.ToTable("Movies");
+                });
+
+            modelBuilder.Entity("api.Data.DirectorsMovie", b =>
+                {
+                    b.HasOne("api.Data.Director", "FKdirector")
+                        .WithMany()
+                        .HasForeignKey("FKdirectorId");
+
+                    b.HasOne("api.Data.Movie", "FKmovie")
+                        .WithMany()
+                        .HasForeignKey("FKmovieId");
+
+                    b.Navigation("FKdirector");
+
+                    b.Navigation("FKmovie");
+                });
+
+            modelBuilder.Entity("api.Data.Movie", b =>
+                {
+                    b.HasOne("api.Data.Classification", "FKclassification")
+                        .WithMany()
+                        .HasForeignKey("FKclassificationId");
+
+                    b.Navigation("FKclassification");
                 });
 #pragma warning restore 612, 618
         }

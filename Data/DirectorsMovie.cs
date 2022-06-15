@@ -7,8 +7,8 @@ namespace api.Data
         public DirectorsMovie() {}
 
         public int Id { get; set; }
-        public int FKmovie { get; set; }
-        public int FKdirector { get; set; }
+        public Movie FKmovie { get; set; }
+        public Director FKdirector { get; set; }
         public DateTime Update { get; set; }
     }
 }
