@@ -52,27 +52,39 @@ namespace api.Controllers
         }
 
         [HttpPost("")]
-        public async Task<int> AddNewMovie([FromBody]Movie movieModel, int classificationId)
+        public async Task<int> AddNewMovie([FromBody]Movie movieModel)
         {
-            var fkclassification = await _context.Classifications.Where(x => x.Id == classificationId)
-                .Select(x => new Classification
-                {
-                    Id = x.Id,
-                    Name = x.Name
-                }).FirstAsync();
+            var fkclassification = await _context.Classifications.Where(x => x.Id == movieModel.FKclassification.Id).FirstAsync();
 
             var movie = new Movie()
             {
                 Name = movieModel.Name,
                 Description = movieModel.Description,
                 FKclassification = fkclassification,
-                Update = movieModel.Update
+                Update = DateTime.Now
             };
 
             _context.Movies.Add(movie);
             await _context.SaveChangesAsync();
 
             return movie.Id;
+        }
+
+        [HttpPut("{id}")]
+        public async Task UpdateMovieById([FromRoute]int id, [FromBody]Movie movieModel)
+        {
+            var fkclassification = await _context.Classifications.Where(x => x.Id == movieModel.FKclassification.Id).FirstAsync();
+            var record = await _context.Movies.FindAsync(id);
+
+            if (record != null)
+            {
+                record.Name = movieModel.Name;
+                record.Description = movieModel.Description;
+                record.Update = DateTime.Now;
+                record.FKclassification = fkclassification;
+            }
+
+            await _context.SaveChangesAsync();
         }
     }
 }

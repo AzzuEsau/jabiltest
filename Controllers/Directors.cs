@@ -60,13 +60,29 @@ namespace api.Controllers
                 FirstName = diretorModel.FirstName,
                 LastName = diretorModel.LastName,
                 Age = diretorModel.Age,
-                Update = diretorModel.Update
+                Update = DateTime.Now
             };
 
             _context.Directories.Add(director);
             await _context.SaveChangesAsync();
 
             return director.Id;
+        }
+
+        [HttpPut("{id}")]
+        public async Task UpdateDirectorById([FromRoute]int id, [FromBody]Director diretorModel)
+        {
+            var record = await _context.Directories.FindAsync(id);
+
+            if (record != null)
+            {
+                record.FirstName = diretorModel.FirstName;
+                record.LastName = diretorModel.LastName;
+                record.Age = diretorModel.Age;
+                record.Update = DateTime.Now;
+            }
+
+            await _context.SaveChangesAsync();
         }
     }
 }

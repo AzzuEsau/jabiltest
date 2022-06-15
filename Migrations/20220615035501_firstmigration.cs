@@ -45,7 +45,7 @@ namespace api.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
-                    FKclassificationId = table.Column<int>(type: "integer", nullable: true),
+                    FKclassificationId = table.Column<int>(type: "integer", nullable: false),
                     Update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
@@ -65,8 +65,8 @@ namespace api.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    FKmovieId = table.Column<int>(type: "integer", nullable: true),
-                    FKdirectorId = table.Column<int>(type: "integer", nullable: true),
+                    FKmovieId = table.Column<int>(type: "integer", nullable: false),
+                    FKdirectorId = table.Column<int>(type: "integer", nullable: false),
                     Update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
