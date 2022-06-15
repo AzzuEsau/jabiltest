@@ -20,16 +20,6 @@ namespace api
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    // var builder = WebApplication.CreateBuilder(args);
-                    
-                    // // Add services to the container.
-                    // builder.Services.AddControllers();
-                    
-                    // // Connect to PostgreSQL Database
-                    // var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-                    // builder.Services.AddDbContext<AppDbContext>(options =>
-                    //     options.UseNpgsql(connectionString));
-
                     webBuilder.UseStartup<Startup>();
                 });
     }

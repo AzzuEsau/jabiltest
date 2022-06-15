@@ -24,17 +24,14 @@ namespace api
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // public void ConfigureServices(IServiceCollection services)
-        // {
-        //     services.AddControllers();
-        //     services.AddSwaggerGen(c =>
-        //     {
-        //         c.SwaggerDoc("v1", new OpenApiInfo { Title = "api", Version = "v1" });
-        //     });
-        // }
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "api", Version = "v1" });
+            });
+
             services.AddMvc();
             services.AddEntityFrameworkNpgsql().AddDbContext<Data.AppDbContext>(opt =>
                 opt.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));

@@ -9,7 +9,7 @@ namespace api.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "classifications",
+                name: "Classifications",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -22,7 +22,7 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "directories",
+                name: "Directories",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -38,7 +38,7 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "movies",
+                name: "Movies",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -50,12 +50,12 @@ namespace api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.ForeignKey("FK_classification", x => x.FKclassification, "classifications", "Id");
+                    table.ForeignKey("FK_classification", x => x.FKclassification, "Classifications", "Id");
                     table.PrimaryKey("PK_Movies", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "directorsmovies",
+                name: "DirectorsMovies",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -66,8 +66,8 @@ namespace api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.ForeignKey("FK_movie", x => x.FKmovie, "movies", "Id");
-                    table.ForeignKey("FK_director", x => x.FKdirector, "directories", "Id");
+                    table.ForeignKey("FK_movie", x => x.FKmovie, "Movies", "Id");
+                    table.ForeignKey("FK_director", x => x.FKdirector, "Directories", "Id");
                     table.PrimaryKey("PK_DirectorsMovies", x => x.Id);
                 });
         }
