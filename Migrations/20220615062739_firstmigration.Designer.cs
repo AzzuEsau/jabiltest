@@ -10,7 +10,7 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220615035501_firstmigration")]
+    [Migration("20220615062739_firstmigration")]
     partial class firstmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,6 +47,9 @@ namespace api.Migrations
                     b.Property<int>("Age")
                         .HasColumnType("integer");
 
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("text");
@@ -63,31 +66,6 @@ namespace api.Migrations
                     b.ToTable("Directories");
                 });
 
-            modelBuilder.Entity("api.Data.DirectorsMovie", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .UseIdentityByDefaultColumn();
-
-                    b.Property<int?>("FKdirectorId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("FKmovieId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("Update")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FKdirectorId");
-
-                    b.HasIndex("FKmovieId");
-
-                    b.ToTable("DirectorsMovies");
-                });
-
             modelBuilder.Entity("api.Data.Movie", b =>
                 {
                     b.Property<int>("Id")
@@ -99,7 +77,13 @@ namespace api.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("boolean");
+
                     b.Property<int?>("FKclassificationId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("FKdirectorId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Name")
@@ -113,22 +97,9 @@ namespace api.Migrations
 
                     b.HasIndex("FKclassificationId");
 
+                    b.HasIndex("FKdirectorId");
+
                     b.ToTable("Movies");
-                });
-
-            modelBuilder.Entity("api.Data.DirectorsMovie", b =>
-                {
-                    b.HasOne("api.Data.Director", "FKdirector")
-                        .WithMany()
-                        .HasForeignKey("FKdirectorId");
-
-                    b.HasOne("api.Data.Movie", "FKmovie")
-                        .WithMany()
-                        .HasForeignKey("FKmovieId");
-
-                    b.Navigation("FKdirector");
-
-                    b.Navigation("FKmovie");
                 });
 
             modelBuilder.Entity("api.Data.Movie", b =>
@@ -137,7 +108,13 @@ namespace api.Migrations
                         .WithMany()
                         .HasForeignKey("FKclassificationId");
 
+                    b.HasOne("api.Data.Director", "FKdirector")
+                        .WithMany()
+                        .HasForeignKey("FKdirectorId");
+
                     b.Navigation("FKclassification");
+
+                    b.Navigation("FKdirector");
                 });
 #pragma warning restore 612, 618
         }

@@ -30,7 +30,8 @@ namespace api.Controllers
                 Name = x.Name,
                 Description = x.Description,
                 FKclassification = x.FKclassification,
-                
+                FKdirector = x.FKdirector,
+                Enabled = x.Enabled
             }).ToListAsync();
 
             return records;
@@ -46,6 +47,8 @@ namespace api.Controllers
                         Name = x.Name,
                         Description = x.Description,
                         FKclassification = x.FKclassification,
+                        FKdirector = x.FKdirector,
+                        Enabled = x.Enabled
                     }).FirstAsync();
 
             return record;
@@ -55,13 +58,16 @@ namespace api.Controllers
         public async Task<int> AddNewMovie([FromBody]Movie movieModel)
         {
             var fkclassification = await _context.Classifications.Where(x => x.Id == movieModel.FKclassification.Id).FirstAsync();
+            var fkdirector = await _context.Directories.Where(x => x.Id == movieModel.FKdirector.Id).FirstAsync();
 
             var movie = new Movie()
             {
                 Name = movieModel.Name,
                 Description = movieModel.Description,
                 FKclassification = fkclassification,
-                Update = DateTime.Now
+                FKdirector = fkdirector,
+                Update = DateTime.Now,
+                Enabled = movieModel.Enabled
             };
 
             _context.Movies.Add(movie);
@@ -74,14 +80,31 @@ namespace api.Controllers
         public async Task UpdateMovieById([FromRoute]int id, [FromBody]Movie movieModel)
         {
             var fkclassification = await _context.Classifications.Where(x => x.Id == movieModel.FKclassification.Id).FirstAsync();
+            var fkdirector = await _context.Directories.Where(x => x.Id == movieModel.FKdirector.Id).FirstAsync();
             var record = await _context.Movies.FindAsync(id);
 
             if (record != null)
             {
                 record.Name = movieModel.Name;
                 record.Description = movieModel.Description;
-                record.Update = DateTime.Now;
                 record.FKclassification = fkclassification;
+                record.FKdirector = fkdirector;
+                record.Update = DateTime.Now;
+                record.Enabled = movieModel.Enabled;
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+
+        [HttpPut("{id}")]
+        public async Task ChangeStatusMovieById([FromRoute]int id)
+        {
+            var record = await _context.Movies.FindAsync(id);
+
+            if (record != null)
+            {
+                record.Enabled = !record.Enabled;
             }
 
             await _context.SaveChangesAsync();

@@ -31,6 +31,7 @@ namespace api.Controllers
                 LastName = x.LastName,
                 Age = x.Age,
                 Update = x.Update,
+                Enabled = x.Enabled
             }).ToListAsync();
 
             return records;
@@ -47,6 +48,7 @@ namespace api.Controllers
                         LastName = x.LastName,
                         Age = x.Age,
                         Update = x.Update,
+                        Enabled = x.Enabled
                     }).FirstAsync();
 
             return record;
@@ -60,7 +62,8 @@ namespace api.Controllers
                 FirstName = diretorModel.FirstName,
                 LastName = diretorModel.LastName,
                 Age = diretorModel.Age,
-                Update = DateTime.Now
+                Update = DateTime.Now,
+                Enabled = diretorModel.Enabled
             };
 
             _context.Directories.Add(director);
@@ -80,6 +83,20 @@ namespace api.Controllers
                 record.LastName = diretorModel.LastName;
                 record.Age = diretorModel.Age;
                 record.Update = DateTime.Now;
+                record.Enabled = diretorModel.Enabled;
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        [HttpPut("{id}")]
+        public async Task ChangeStatusDirectorById([FromRoute]int id)
+        {
+            var record = await _context.Directories.FindAsync(id);
+
+            if (record != null)
+            {
+                record.Enabled = !record.Enabled;
             }
 
             await _context.SaveChangesAsync();

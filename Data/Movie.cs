@@ -10,6 +10,8 @@ namespace api.Data
         public string Name { get; set; }
         public string Description { get; set; }
         public Classification FKclassification { get; set; }
+        public Director FKdirector { get; set; }
         public DateTime Update { get; set; }
+        public bool Enabled { get; set; }
     }
 }

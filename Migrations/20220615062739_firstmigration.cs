@@ -13,7 +13,7 @@ namespace api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -26,11 +26,12 @@ namespace api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     FirstName = table.Column<string>(type: "text", nullable: false),
                     LastName = table.Column<string>(type: "text", nullable: false),
                     Age = table.Column<int>(type: "integer", nullable: false),
-                    Update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                    Update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Enabled = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -42,11 +43,13 @@ namespace api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
                     FKclassificationId = table.Column<int>(type: "integer", nullable: false),
-                    Update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                    FKdirectorId = table.Column<int>(type: "integer", nullable: false),
+                    Update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Enabled = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -57,64 +60,35 @@ namespace api.Migrations
                         principalTable: "Classifications",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DirectorsMovies",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    FKmovieId = table.Column<int>(type: "integer", nullable: false),
-                    FKdirectorId = table.Column<int>(type: "integer", nullable: false),
-                    Update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DirectorsMovies", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DirectorsMovies_Directories_FKdirectorId",
+                        name: "FK_Movies_Directories_FKdirectorId",
                         column: x => x.FKdirectorId,
                         principalTable: "Directories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_DirectorsMovies_Movies_FKmovieId",
-                        column: x => x.FKmovieId,
-                        principalTable: "Movies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DirectorsMovies_FKdirectorId",
-                table: "DirectorsMovies",
-                column: "FKdirectorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DirectorsMovies_FKmovieId",
-                table: "DirectorsMovies",
-                column: "FKmovieId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Movies_FKclassificationId",
                 table: "Movies",
                 column: "FKclassificationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Movies_FKdirectorId",
+                table: "Movies",
+                column: "FKdirectorId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "DirectorsMovies");
-
-            migrationBuilder.DropTable(
-                name: "Directories");
-
-            migrationBuilder.DropTable(
                 name: "Movies");
 
             migrationBuilder.DropTable(
                 name: "Classifications");
+
+            migrationBuilder.DropTable(
+                name: "Directories");
         }
     }
 }

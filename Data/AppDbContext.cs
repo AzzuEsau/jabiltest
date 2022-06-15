@@ -12,6 +12,5 @@ namespace api.Data
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Classification> Classifications { get; set; }
         public DbSet<Director> Directories { get; set; }
-        public DbSet<DirectorsMovie> DirectorsMovies { get; set; }
     }
 }
