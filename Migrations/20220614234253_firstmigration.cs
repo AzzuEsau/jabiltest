@@ -9,7 +9,7 @@ namespace api.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Classifications",
+                name: "classifications",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -22,7 +22,7 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Directories",
+                name: "directories",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -38,24 +38,7 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DirectorsMovies",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    FKmovie = table.Column<int>(type: "integer", nullable: false),
-                    FKdirector = table.Column<int>(type: "integer", nullable: false),
-                    Update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.ForeignKey("FK_movie", x => x.FKmovie, "Movies", "Id");
-                    table.ForeignKey("FK_director", x => x.FKdirector, "Directories", "Id");
-                    table.PrimaryKey("PK_DirectorsMovies", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Movies",
+                name: "movies",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -67,8 +50,25 @@ namespace api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.ForeignKey("FK_classification", x => x.FKclassification, "Classifications", "Id");
+                    table.ForeignKey("FK_classification", x => x.FKclassification, "classifications", "Id");
                     table.PrimaryKey("PK_Movies", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "directorsmovies",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    FKmovie = table.Column<int>(type: "integer", nullable: false),
+                    FKdirector = table.Column<int>(type: "integer", nullable: false),
+                    Update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.ForeignKey("FK_movie", x => x.FKmovie, "movies", "Id");
+                    table.ForeignKey("FK_director", x => x.FKdirector, "directories", "Id");
+                    table.PrimaryKey("PK_DirectorsMovies", x => x.Id);
                 });
         }
 
@@ -81,10 +81,11 @@ namespace api.Migrations
                 name: "Directories");
 
             migrationBuilder.DropTable(
+                name: "Movies");
+                
+            migrationBuilder.DropTable(
                 name: "DirectorsMovies");
 
-            migrationBuilder.DropTable(
-                name: "Movies");
         }
     }
 }
